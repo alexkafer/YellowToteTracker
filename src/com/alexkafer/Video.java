@@ -21,14 +21,15 @@ public class Video {
 
 	public static void main(String[] args) throws InterruptedException {
 
-		// new Video().run();
-
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 		MatWindow window = new MatWindow("Camera");
 		MatWindow threshWindow = new MatWindow("Thresh");
 
-		VideoCapture camera = new VideoCapture(0);
+		VideoCapture camera = new VideoCapture();
+		
+		while (!camera.open("10.25.26.23/mjpg/1/video.mjpg"))
+			Thread.sleep(100);
 
 		JFrame jFrame = new JFrame("Options");
 		jFrame.setSize(200, 200);
@@ -55,7 +56,9 @@ public class Video {
 		while (true) {
 			Mat original = new Mat();
 
-			camera.read(original);
+			if (!camera.read(original)) {
+				continue;
+			}
 
 			Mat image = new Mat();
 
